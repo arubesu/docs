@@ -1,7 +1,6 @@
 "use client";
 
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/store/use-editor-store";
 import {
   BoldIcon,
@@ -10,37 +9,14 @@ import {
   LucideIcon,
   MessageSquarePlusIcon,
   PrinterIcon,
-  Redo,
   Redo2Icon,
   RemoveFormattingIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
 } from "lucide-react";
-
-interface ToolbarButtonProps {
-  onClick?: () => void;
-  icon: LucideIcon;
-  isActive?: boolean;
-}
-
-export const ToolbarButton = ({
-  onClick,
-  icon: Icon,
-  isActive,
-}: ToolbarButtonProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "text-sm h-7 min-w-7 flex items-center justify-center rounded-sm hover:bg-neutral-200/80",
-        isActive && "bg-neutral-200/80"
-      )}
-    >
-      <Icon className="size-4" />
-    </button>
-  );
-};
+import { ToolbarButton } from "./toolbar-button";
+import { FontFamilyButton } from "./font-family-button";
 
 export const Toolbar = () => {
   const { editor } = useEditorStore();
@@ -128,6 +104,7 @@ export const Toolbar = () => {
         </div>
       ))}
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      <FontFamilyButton />
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
