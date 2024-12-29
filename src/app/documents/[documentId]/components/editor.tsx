@@ -12,7 +12,9 @@ import Image from "@tiptap/extension-image";
 import ImageResize from "tiptap-extension-resize-image";
 import Underline from "@tiptap/extension-underline";
 import FontFamily from "@tiptap/extension-font-family";
+import Highlight from "@tiptap/extension-highlight";
 import { useEditorStore } from "@/store/use-editor-store";
+import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 
 export const Editor = () => {
@@ -55,6 +57,10 @@ export const Editor = () => {
       Underline,
       FontFamily,
       TextStyle,
+      Color,
+      Highlight.configure({
+        multicolor: true,
+      }),
       TaskItem.configure({
         nested: true,
       }),
