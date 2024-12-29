@@ -103,6 +103,16 @@ body {
       outline: 3px solid hsl(var(--primary));
     }
   }
+  
+  /* Link styles */
+  a {
+    @apply text-blue-600;
+    cursor: pointer;
+
+    &:hover {
+      @apply underline;
+    }
+  }
 
   /* Heading styles */
   h1,
