@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { ToolbarButton } from "./toolbar-button";
 import { FontFamilyButton } from "./font-family-button";
+import { HeadingLevelButton } from "./heading-level-button";
 
 export const Toolbar = () => {
   const { editor } = useEditorStore();
@@ -98,16 +99,27 @@ export const Toolbar = () => {
 
   return (
     <div className="bg-[#f1f4f9] px-2.5 py-0.5 rounded-[24px] min-h-[40px] flex items-center gap-x-0.5 overflow-x-auto ">
-      {sections[0].map((section, index) => (
-        <div key={index} className="flex gap-x-0.5">
-          <ToolbarButton key={section.label} {...section} />
-        </div>
+      {sections[0].map((section) => (
+        <ToolbarButton key={section.label} {...section} />
       ))}
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       <FontFamilyButton />
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      <HeadingLevelButton />
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+      {/* TODO: font size  */}
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+
+      {/* TODO: text color  */}
+      {/* TODO: highlight  */}
+      <Separator orientation="vertical" className="h-6 bg-neutral-300" />
+
+      {/* TODO: Link  */}
+      {/* TODO: Image  */}
+      {/* TODO: Align  */}
 
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
 
