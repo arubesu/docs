@@ -20,6 +20,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import { FontSizeExtensions } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-heigth";
+import { Ruler } from "./ruler/ruler";
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
@@ -108,10 +109,12 @@ export const Editor = () => {
       </tbody>
     </table>
   `,
+    immediatelyRender: false,
   });
 
   return (
-    <div className="size-full overflow-x-auto bg-[#f9fbfd] px-4 print:p-0 print:bg-white print:overflow-visible">
+    <div className="size-full overflow-x-auto bg-editor-bg px-4 print:p-0 print:bg-white print:overflow-visible">
+      <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
       </div>
