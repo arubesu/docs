@@ -18,6 +18,8 @@ import { useEditorStore } from "@/store/use-editor-store";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
+import { FontSizeExtensions } from "@/extensions/font-size";
+import { LineHeightExtension } from "@/extensions/line-heigth";
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
@@ -56,6 +58,12 @@ export const Editor = () => {
     },
     extensions: [
       StarterKit,
+      // Custom Extensions
+      FontSizeExtensions,
+      LineHeightExtension.configure({
+        types: ["heading", "paragraph"],
+      }),
+      // Tiptap Extensions
       Underline,
       FontFamily,
       TextStyle,
