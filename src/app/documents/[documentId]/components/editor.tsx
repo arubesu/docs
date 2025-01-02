@@ -17,6 +17,7 @@ import Highlight from "@tiptap/extension-highlight";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Color } from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
+import TextAlign from "@tiptap/extension-text-align";
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
@@ -59,6 +60,9 @@ export const Editor = () => {
       FontFamily,
       TextStyle,
       Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       Link.configure({
         openOnClick: false,
         autolink: true,

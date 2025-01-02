@@ -22,6 +22,8 @@ import { TextColorButton } from "./text-color-button";
 import { HighlightColorButton } from "./highlight-color-button";
 import { LinkButton } from "./link-button";
 import { ImageButton } from "./image-button";
+import { AlignButton } from "./align-button";
+import { ListButton } from "./list-button";
 
 export const Toolbar = () => {
   const { editor } = useEditorStore();
@@ -123,7 +125,8 @@ export const Toolbar = () => {
 
       <LinkButton />
       <ImageButton />
-      {/* TODO: Align  */}
+      <AlignButton />
+      <ListButton />
 
       <Separator orientation="vertical" className="h-6 bg-neutral-300" />
 
