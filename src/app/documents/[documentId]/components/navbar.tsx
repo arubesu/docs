@@ -40,6 +40,7 @@ import {
 import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/store/use-editor-store";
 import { MAX_TABLE_LENGTH } from "@/constants/page";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 export const Navbar = () => {
   const { editor } = useEditorStore();
@@ -248,6 +249,15 @@ export const Navbar = () => {
             </Menubar>
           </div>
         </div>
+      </div>
+      <div className="flex gap-3 items-center pl-6">
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
       </div>
     </nav>
   );

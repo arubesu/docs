@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
+import { toast } from "sonner";
 interface RemoveDialogProps {
   documentId: Id<"documents">;
   children: React.ReactNode;
@@ -41,7 +42,10 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
             onClick={(e) => {
               e.stopPropagation();
               setIsRemoving(false);
-              remove({ id: documentId }).finally(() => setIsRemoving(false));
+              remove({ id: documentId })
+                .then(() => toast.success("Document removed"))
+                .catch(() => toast.error("Something went wrong"))
+                .finally(() => setIsRemoving(false));
             }}
           >
             Delete
