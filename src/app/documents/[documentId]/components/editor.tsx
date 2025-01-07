@@ -20,10 +20,12 @@ import TextStyle from "@tiptap/extension-text-style";
 import TextAlign from "@tiptap/extension-text-align";
 import { FontSizeExtensions } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-heigth";
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { Ruler } from "./ruler/ruler";
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
+  const liveblocks = useLiveblocksExtension();
 
   const editor = useEditor({
     onCreate({ editor }) {
@@ -58,7 +60,11 @@ export const Editor = () => {
       },
     },
     extensions: [
-      StarterKit,
+      liveblocks,
+      StarterKit.configure({
+        // The Liveblocks extension comes with its own history handling
+        history: false,
+      }),
       // Custom Extensions
       FontSizeExtensions,
       LineHeightExtension.configure({

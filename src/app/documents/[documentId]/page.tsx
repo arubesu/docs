@@ -1,3 +1,4 @@
+import { Room } from "@/components/liveblocks/room";
 import { Editor } from "./components/editor";
 import { Navbar } from "./components/navbar";
 import { Toolbar } from "./components/toolbar/toolbar";
@@ -17,7 +18,9 @@ const DocumentIdPage = async ({ params }: DocumentIdPageProps) => {
           <Toolbar />
         </div>
         <div className="pt-[114px] print:pt-0">
-          <Editor />
+          <Room>
+            <Editor />
+          </Room>
         </div>
       </div>
     </>
