@@ -22,6 +22,7 @@ import { FontSizeExtensions } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-heigth";
 import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import { Ruler } from "./ruler/ruler";
+import { Threads } from "@/components/liveblocks/threads";
 
 export const Editor = () => {
   const { setEditor } = useEditorStore();
@@ -69,6 +70,7 @@ export const Editor = () => {
       FontSizeExtensions,
       LineHeightExtension.configure({
         types: ["heading", "paragraph"],
+        defaultLineHeight: "1.5",
       }),
       // Tiptap Extensions
       Underline,
@@ -107,6 +109,7 @@ export const Editor = () => {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   );
