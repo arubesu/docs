@@ -32,8 +32,8 @@ import { useEditorStore } from "@/store/use-editor-store";
 import { FontSizeExtensions } from "@/extensions/font-size";
 import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from "@/constants/page";
 import { Threads } from "@/components/liveblocks/threads";
-import { Ruler } from "lucide-react";
 import { LineHeightExtension } from "@/extensions/line-height";
+import { Ruler } from "./ruler/ruler";
 
 interface EditorProps {
   initialContent?: string | undefined;
