@@ -2,11 +2,11 @@
 
 import { Preloaded, usePreloadedQuery } from "convex/react";
 
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 import { Room } from "@/components/liveblocks/room";
-import { Navbar } from "./components/navbar";
-import { Toolbar } from "./components/toolbar/toolbar";
-import { Editor } from "./components/editor";
+import { Navbar } from "./navbar";
+import { Toolbar } from "./toolbar/toolbar";
+import { Editor } from "./editor";
 
 interface DocumentProps {
   preloadedDocument: Preloaded<typeof api.documents.getById>;
