@@ -24,6 +24,8 @@ import {
   Undo2Icon,
 } from "lucide-react";
 
+import { RenameDialog } from "@/components/rename-dialog";
+import { RemoveDialog } from "@/components/remove-dialog";
 import {
   Menubar,
   MenubarContent,
@@ -37,15 +39,38 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 
+import { Avatars } from "./avatars";
+
 import { DocumentInput } from "./document-input";
 import { useEditorStore } from "@/store/use-editor-store";
-import { MAX_TABLE_LENGTH } from "@/constants/page";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { Avatars } from "./avatars";
 import { Inbox } from "./inbox";
+import { useMutation } from "convex/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { api } from "../../../../../convex/_generated/api";
+import { Doc } from "../../../../../convex/_generated/dataModel";
 
-export const Navbar = () => {
+interface NavbarProps {
+  data: Doc<"documents">;
+}
+
+export const Navbar = ({ data }: NavbarProps) => {
+  const router = useRouter();
   const { editor } = useEditorStore();
+
+  const mutation = useMutation(api.documents.create);
+  const onNewDocument = () => {
+    mutation({
+      title: "Untitled Document",
+      initialContent: "",
+    })
+      .catch(() => toast.error("Something went wrong"))
+      .then((id) => {
+        toast.success("Document created");
+        router.push(`/documents/${id}`);
+      });
+  };
 
   const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
     editor
@@ -62,29 +87,35 @@ export const Navbar = () => {
     a.download = filename;
     a.click();
   };
+
   const onSaveJson = () => {
     if (!editor) return;
+
     const content = editor.getJSON();
     const blob = new Blob([JSON.stringify(content)], {
       type: "application/json",
     });
-    onDownload(blob, `document.json`); // TODO: User document name
+    onDownload(blob, `${data.title}.json`);
   };
+
   const onSaveHTML = () => {
     if (!editor) return;
+
     const content = editor.getHTML();
     const blob = new Blob([content], {
       type: "text/html",
     });
-    onDownload(blob, `document.html`); // TODO: User document name
+    onDownload(blob, `${data.title}.html`);
   };
+
   const onSaveText = () => {
     if (!editor) return;
+
     const content = editor.getText();
     const blob = new Blob([content], {
       type: "text/plain",
     });
-    onDownload(blob, `document.txt`); // TODO: User document name
+    onDownload(blob, `${data.title}.txt`);
   };
 
   return (
@@ -94,7 +125,7 @@ export const Navbar = () => {
           <Image src={"/logo.svg"} alt="logo" width={36} height={36} />
         </Link>
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput title={data.title} id={data._id} />
           <div className="flex">
             <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
               <MenubarMenu>
@@ -115,7 +146,7 @@ export const Navbar = () => {
                         <GlobeIcon className="size-4 mr-2" />
                         HTML
                       </MenubarItem>
-                      <MenubarItem onClick={window.print}>
+                      <MenubarItem onClick={() => window.print()}>
                         <BsFilePdf className="size-4 mr-2" />
                         PDF
                       </MenubarItem>
@@ -125,19 +156,29 @@ export const Navbar = () => {
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
-                  <MenubarItem>
+                  <MenubarItem onClick={onNewDocument}>
                     <FilePlusIcon className="mr-2 size-4" />
                     New Document
                   </MenubarItem>
                   <MenubarSeparator />
-                  <MenubarItem>
-                    <FilePenIcon className="mr-2 size-4" />
-                    Rename
-                  </MenubarItem>
-                  <MenubarItem>
-                    <TrashIcon className="mr-2 size-4" />
-                    Remove
-                  </MenubarItem>
+                  <RenameDialog documentId={data._id} initialTitle={data.title}>
+                    <MenubarItem
+                      onClick={(e) => e.stopPropagation()}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <FilePenIcon className="mr-2 size-4" />
+                      Rename
+                    </MenubarItem>
+                  </RenameDialog>
+                  <RemoveDialog documentId={data._id}>
+                    <MenubarItem
+                      onClick={(e) => e.stopPropagation()}
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <TrashIcon className="mr-2 size-4" />
+                      Remove
+                    </MenubarItem>
+                  </RemoveDialog>
                   <MenubarSeparator />
                   <MenubarItem onClick={() => window.print()}>
                     <PrinterIcon className="mr-2 size-4" />
@@ -172,19 +213,26 @@ export const Navbar = () => {
                   <MenubarSub>
                     <MenubarSubTrigger>Table</MenubarSubTrigger>
                     <MenubarSubContent>
-                      {Array.from(
-                        { length: MAX_TABLE_LENGTH },
-                        (_, i) => i + 1
-                      ).map((size) => (
-                        <MenubarItem
-                          key={`${size}x${size}`}
-                          onClick={() =>
-                            insertTable({ rows: size, cols: size })
-                          }
-                        >
-                          {size} x {size}
-                        </MenubarItem>
-                      ))}
+                      <MenubarItem
+                        onClick={() => insertTable({ rows: 1, cols: 1 })}
+                      >
+                        1 x 1
+                      </MenubarItem>
+                      <MenubarItem
+                        onClick={() => insertTable({ rows: 2, cols: 2 })}
+                      >
+                        2 x 2
+                      </MenubarItem>
+                      <MenubarItem
+                        onClick={() => insertTable({ rows: 4, cols: 4 })}
+                      >
+                        4 x 4
+                      </MenubarItem>
+                      <MenubarItem
+                        onClick={() => insertTable({ rows: 4, cols: 6 })}
+                      >
+                        4 x 6
+                      </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
                 </MenubarContent>
@@ -206,8 +254,7 @@ export const Navbar = () => {
                         }
                       >
                         <BoldIcon className="size-4 mr-2" />
-                        Bold&nbsp;
-                        <MenubarShortcut>&#x2318; + B</MenubarShortcut>
+                        Bold
                       </MenubarItem>
                       <MenubarItem
                         onClick={() =>
@@ -215,8 +262,7 @@ export const Navbar = () => {
                         }
                       >
                         <ItalicIcon className="size-4 mr-2" />
-                        Italic&nbsp;
-                        <MenubarShortcut>&#x2318; + I&nbsp;</MenubarShortcut>
+                        Italic
                       </MenubarItem>
                       <MenubarItem
                         onClick={() =>
@@ -224,8 +270,7 @@ export const Navbar = () => {
                         }
                       >
                         <UnderlineIcon className="size-4 mr-2" />
-                        Underline&nbsp;
-                        <MenubarShortcut>&#x2318; + U</MenubarShortcut>
+                        Underline
                       </MenubarItem>
                       <MenubarItem
                         onClick={() =>
@@ -233,8 +278,7 @@ export const Navbar = () => {
                         }
                       >
                         <StrikethroughIcon className="size-4 mr-2" />
-                        Strikethrough&nbsp;
-                        <MenubarShortcut>&#x2318; + S</MenubarShortcut>
+                        Strikethrough
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>

@@ -15,6 +15,7 @@ import {
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 interface RemoveDialogProps {
   documentId: Id<"documents">;
   children: React.ReactNode;
@@ -22,6 +23,8 @@ interface RemoveDialogProps {
 export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
   const remove = useMutation(api.documents.removeById);
   const [isRemoving, setIsRemoving] = useState(false);
+  const router = useRouter();
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -29,7 +32,7 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permamently delete your
+            This action cannot be undone. This will permanently delete your
             document.
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -43,7 +46,10 @@ export const RemoveDialog = ({ documentId, children }: RemoveDialogProps) => {
               e.stopPropagation();
               setIsRemoving(false);
               remove({ id: documentId })
-                .then(() => toast.success("Document removed"))
+                .then(() => {
+                  toast.success("Document removed");
+                  router.push("/");
+                })
                 .catch(() => toast.error("Something went wrong"))
                 .finally(() => setIsRemoving(false));
             }}
